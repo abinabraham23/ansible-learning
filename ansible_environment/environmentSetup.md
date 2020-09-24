@@ -29,7 +29,7 @@ $> docker run --name server2 --hostname server2.test -p 2225:22 -d ubuntu-ssh
  $> ssh -i 'id_rsa' -p 2225 root@localhost
 
  __Note__: In case of any error with known-hosts, run the below command to remove the known host:
-$> ssh-keygen -f "/home/abinabraham/.ssh/known_hosts" -R "[localhost]:2224"
+$> ssh-keygen -f "~/.ssh/known_hosts" -R "[localhost]:2224"
 
 
 ## Ansible setup
