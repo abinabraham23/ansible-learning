@@ -1,38 +1,21 @@
 FROM ubuntu:18.04 
 
-RUN apt-get update && \
-    apt-get install -y openssh-server pwgen netcat net-tools curl wget && \
-    apt-get clean all
-
-# python and relevant tools 
-RUN apt-get update && apt-get install -y \ 
-        build-essential \ 
- python3 \ 
- python3-dev \ 
- libxml2-dev \ 
- libxslt-dev \ 
- libssl-dev \ 
- zlib1g-dev \ 
- libyaml-dev \ 
- libffi-dev \ 
- python3-pip
+RUN apt-get update \
+    && apt-get install -y openssh-server curl python3 python3-pip \
+    && apt-get clean all
 
 # Latest versions of python tools via pip 
-RUN pip3 install --upgrade pip \ 
- virtualenv \ 
- requests
+RUN pip3 install --upgrade pip virtualenv requests
 
-RUN ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
+RUN ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
-RUN mkdir /var/run/sshd
+RUN mkdir /var/run/sshd \
+   && mkdir /root/.ssh
 
-RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config \ 
+  && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
-RUN mkdir /root/.ssh
-
-COPY id_rsa.pub /root/.ssh/authorized_keys
+COPY sshkey.pub /root/.ssh/authorized_keys
 
 RUN chmod 400 /root/.ssh/authorized_keys
 
