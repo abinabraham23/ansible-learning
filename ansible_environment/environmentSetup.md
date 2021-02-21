@@ -88,14 +88,14 @@ ansible servers -i inventory -m ping
 
 ## Start / Stop Docker 
 
-* Start Docker Daemon
-```
-service docker start
-```
+* Start / Stop Docker Daemon
 
-* Start Docker Daemon
 ```
 service docker start
+```
+or
+```
+service docker stop
 ```
 
 ### To Do: Create a ansible playbook to create docker containers as ansible playground
