@@ -1,0 +1,32 @@
+---
+- name: Install Apache
+  hosts: servers
+  gather_facts: false
+  remote_user: root
+
+  tasks:
+  - name: Install, configure and start Apache
+    block: 
+      - name: Ensure Apache is installed when OS distribution is Ubuntu
+        apt:
+          name: apache2
+          state: present
+
+      - name: Start the apache service with enabling the service to start on boot.
+        service:
+          name: apache2
+          state: started
+          enabled: yes
+    rescue: 
+      - name: Print error message when caught an error with block
+        debug: 
+          msg: "Caught an error installing Apache"
+    always:
+      - name: Always verify the service status
+        shell: '/etc/init.d/apache2 status'
+        register: service_status
+
+      - name: Debug the service status
+        debug:
+          msg: "{{ service_status.stdout }}"
+    

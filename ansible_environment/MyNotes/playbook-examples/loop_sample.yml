@@ -1,0 +1,43 @@
+---
+- name: Play to get all host details in inventory
+  hosts: servers
+  remote_user: root 
+  gather_facts: false
+
+  vars:
+    app_data:
+      Name: Chatter
+      Environment: Dev
+      Language: Java
+      
+  tasks:
+  - name: Add multiple groups based on list of group
+    group: 
+      name: "{{ item }}"
+      state: present
+    loop: 
+      - ops
+      - admin
+
+  - name: Add multiple user to groups with list of hashes i.e. name and group as subkeys
+    user: 
+      name: "{{ item.name }}"
+      groups: "{{ item.group }}"
+      state: present
+    loop: 
+      - { name: 'testuser1', group: 'ops' }
+      - { name: 'testuser2', group: 'admin' }
+  
+  - name: List the variables as dictionary using dict2items filter.
+    debug:
+      msg: "{{ item.key }} : {{ item.value }}"
+    loop: "{{ app_data | dict2items }}"
+
+# Note: dict2items filter transforms a dictionary into a list of items suitable for looping
+
+  - name: Show all hosts in inventory using inventory_hostname plugin and debug with var
+    debug: 
+      var: item
+    loop: "{{ query('inventory_hostnames','all') }}"
+  
+  

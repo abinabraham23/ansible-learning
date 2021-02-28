@@ -1,0 +1,47 @@
+---
+- name: Play to get all host details in inventory
+  hosts: servers
+  remote_user: root 
+  gather_facts: false
+
+  vars:
+    dest_dir: /tmp/config
+    dest_file: foo.conf
+    dest_mode: '0755'
+    
+    # below variables as list.
+    cloud_regions_list:
+      - eu_central_zone
+      - eu_west_zone
+      - us_west_zone
+      - ap_central_zone
+    # below variables as dictionary (key-value).
+    app_data_dict:
+      Name: ShoppingCart
+      Environment: Dev
+      Language: Java
+      
+  tasks:
+  - name: Create a directory if it doesn't exist. 
+    file:
+      path: "{{ dest_dir }}"
+      mode: "{{ dest_mode }}"
+      state: directory
+
+  - name: Touch a file with mode defined as variables
+    file: 
+      path: "{{ dest_dir }}/{{ dest_file }}"    
+      mode: "{{ dest_mode }}"
+      state: touch
+
+  - name: List the variables as list
+    debug:
+      msg: "Here are the cloud regions: {{ item }} "
+    loop: "{{ cloud_regions_list }}"
+
+  - name: List the variables as dictionary using dict2items filter.
+    debug:
+      msg: "{{ item.key }} : {{ item.value }}"
+    loop: "{{ app_data_dict | dict2items }}"
+
+# Note: dict2items filter transforms a dictionary into a list of items suitable for looping

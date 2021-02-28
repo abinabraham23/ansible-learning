@@ -1,0 +1,24 @@
+---
+- name: Start all the services
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars: 
+    server1: host1
+    server2: host2
+  
+  tasks:
+  - name: Ensure the running host containers are stopped. 
+    docker_container:
+      name: "{{ item.name }}"
+      force_kill: yes
+      state: absent 
+    loop: 
+      - { name: "{{ server1 }}" }
+      - { name: "{{ server2 }}" }
+
+  - name: Ensure docker service is stopped
+    service: 
+      name: docker
+      state: stopped

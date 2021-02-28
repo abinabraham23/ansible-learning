@@ -1,0 +1,20 @@
+---
+- name: Install Apache
+  hosts: servers
+#  gather_facts: false
+  remote_user: root
+
+  tasks:
+  - name: Ensure Apache is installed when OS distribution is Ubuntu
+    apt:
+      name: apache2
+      state: present
+
+  - name: Start the apache service with enabling the service to start on boot.
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+
+# Verify the running service with below ad-hoc command:
+# ansible servers -m shell -a 'service apache2 status'

@@ -1,0 +1,40 @@
+---
+- name: Start the host servers as containers
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars: 
+    server1: host1
+    server_port1: 7771
+    server2: host2
+    server_port2: 7772
+    ssh_port: 22
+  
+  tasks:
+  - name: Ensure docker service is running
+    service: 
+      name: docker
+      state: started 
+
+  - name: Ensure there are no running container with host name. 
+    docker_container:
+      name: "{{ item.name }}"
+      force_kill: yes
+      state: absent 
+    loop: 
+      - { name: "{{ server1 }}" }
+      - { name: "{{ server2 }}" }
+
+  - name: Ensure the host containers are running
+    docker_container: 
+      name: "{{ item.name }}"
+      hostname: "{{ item.name }}.test"
+      ports: "{{ item.port }}:{{ ssh_port }}"
+      image: ansible-host
+      state: started
+    loop: 
+      - { name: "{{ server1 }}", port: "{{ server_port1 }}" }
+      - { name: "{{ server2 }}", port: "{{ server_port2 }}" }
+
+  
