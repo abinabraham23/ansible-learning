@@ -1,4 +1,4 @@
-## JBoss/Wildfly v13 Deployment in Standalone mode
+## Wildfly v13 (earlier Jboss AS) deployment in Standalone mode
 
 **Pre-requisite**
 - Requires Ansible 2.9 or newer
