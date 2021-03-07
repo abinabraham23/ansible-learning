@@ -5,7 +5,7 @@
 - Expects Ubuntu 18.04 or newer
 - Managed hosts are setup correctly
 
-**Notes:**
+### Notes
 
 * This playbook deploy a simple implementation of Wildfly v13 (earlier known as JBoss AS), a community version of JBoss application server offering.
 * includes two roles:
@@ -18,7 +18,7 @@
 ```
 	ansible-playbook -i servers roles-example/wildfly-run.yml
 ```
-When the playbook run completes, we should be able to see the Wildfly server running on the ports we defined, on the target machines. The sample Java application deployed on the server and accessible over the http://localhost:8080
+When the playbook run completes, we should be able to see the Wildfly server running on the ports we defined, on the target machines. The sample Java application deployed on the server and accessible over http://localhost:8080
 
 Note: the ports for wildfly server running as docker container are not exposed, and can be accessible by ssh to container or with ansible modules like shell (using curl)
 
