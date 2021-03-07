@@ -1,0 +1,6 @@
+# HTTP & HTTPS port for Wildfly/JBoss server
+http_port: 8080
+https_port: 8443
+
+base_dir: "/opt/jboss"
+wildfly_home: "{{ base_dir }}/wildfly"

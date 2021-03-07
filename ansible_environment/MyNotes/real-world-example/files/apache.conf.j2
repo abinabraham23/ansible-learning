@@ -1,0 +1,5 @@
+<VirtualHost *:{{ http_port }}>
+    ServerAdmin {{ app_user }}@localhost
+    ServerName {{ http_host }}
+    DocumentRoot /var/www/{{ http_host }}
+</VirtualHost>

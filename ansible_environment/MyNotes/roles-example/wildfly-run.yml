@@ -1,0 +1,9 @@
+---
+- name: Install Wildfly (earlier Jboss AS) and deploy a simple Java application
+  hosts: servers
+  gather_facts: false
+  remote_user: root
+
+  roles:
+    - install-wildfly-standalone
+    - deploy-java-app

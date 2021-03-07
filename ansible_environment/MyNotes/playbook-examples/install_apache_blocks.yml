@@ -17,6 +17,7 @@
           name: apache2
           state: started
           enabled: yes
+          
     rescue: 
       - name: Print error message when caught an error with block
         debug: 

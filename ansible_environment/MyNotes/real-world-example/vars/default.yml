@@ -1,0 +1,6 @@
+---
+app_user: "sysadmin"
+app_user_grp: "admin"
+http_host: "ansibletraining"
+http_port: "80"
+disable_default: true

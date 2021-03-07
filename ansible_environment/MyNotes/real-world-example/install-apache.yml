@@ -1,0 +1,83 @@
+---
+- name: Install Apache
+  hosts: servers
+  #gather_facts: false
+  remote_user: root
+
+  vars_files:
+    - vars/default.yml
+
+  tasks:
+    - name: Add user group
+      group: 
+        name: "{{ app_user_grp }}"
+        state: present
+      
+    - name: Add user to group
+      user: 
+        name: "{{ app_user }}"
+        groups: "{{ app_user_grp }}"
+        state: present
+      
+    - name: Install Apache and Firewalld
+      apt: 
+        name: "{{ item }}" 
+        update_cache: yes 
+        state: present
+      loop: 
+        - apache2
+        - firewalld
+      when: ansible_facts['distribution'] == "Ubuntu"
+    
+    - name: Start apache and firewalld services, enable service to start on boot.
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop: 
+        - apache2
+        - firewalld
+
+    - name: Create root directory of web server
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: '0755'
+
+    - name: Copy index test page
+      template:
+        src: "files/index.html.j2"
+        dest: "/var/www/{{ http_host }}/index.html"
+    
+    - name: Set up Apache virtualhost
+      template:
+        src: "files/apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_host }}.conf"
+    
+    - name: Disable default Apache site
+      shell: /usr/sbin/a2dissite 000-default.conf
+      when: disable_default
+      notify: reload apache    
+
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite {{ http_host }}.conf
+      notify: reload apache
+
+    - name: Open port 80 for http access
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+      notify: restart firewalld
+
+  handlers:
+    - name: reload apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: restart firewalld
+      service:
+        name: firewalld
+        state: restarted

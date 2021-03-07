@@ -1,0 +1,13 @@
+---
+- name: Copy application WAR file to host
+  copy:
+    src: ROOT.war
+    dest: /tmp
+
+- name: Deploy java application to Wildfly
+  jboss:
+    deploy_path: "{{ wildfly_home }}/standalone/deployments/"
+    src: /tmp/ROOT.war
+    deployment: ROOT.war
+    state: present
+
