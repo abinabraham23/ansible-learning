@@ -1,0 +1,24 @@
+---
+training_users:
+  - training_user_1
+  - training_user_2
+  - training_user_3
+  - training_user_4
+
+training_users_inventory:
+  - { user: 'training_user_1', host_grp: 'user1_sg', host1: 'user1.host1', host2: 'user1.host2' }
+  - { user: 'training_user_2', host_grp: 'user2_sg', host1: 'user2.host1', host2: 'user2.host2' }
+  - { user: 'training_user_3', host_grp: 'user3_sg', host1: 'user3.host1', host2: 'user3.host2' }
+  - { user: 'training_user_4', host_grp: 'user4_sg', host1: 'user4.host1', host2: 'user4.host2' }
+
+training_users_ssh_config:
+  - { user: 'training_user_1', host1: 'user1.host1', host2: 'user1.host2', port1: 7001, port2: 8001 }
+  - { user: 'training_user_2', host1: 'user2.host1', host2: 'user2.host2', port1: 7002, port2: 8002 }
+  - { user: 'training_user_3', host1: 'user3.host1', host2: 'user3.host2', port1: 7003, port2: 8003 }
+  - { user: 'training_user_4', host1: 'user4.host1', host2: 'user4.host2', port1: 7004, port2: 8004 }
+
+training_users_single_host:
+  - { user: 'training_user_1', host_grp: 'user1_sg', host: 'user1.host', port: 7001 }
+  - { user: 'training_user_2', host_grp: 'user2_sg', host: 'user2.host', port: 7002 }
+  - { user: 'training_user_3', host_grp: 'user3_sg', host: 'user3.host', port: 7003 }
+  - { user: 'training_user_4', host_grp: 'user4_sg', host: 'user4.host', port: 7004 }

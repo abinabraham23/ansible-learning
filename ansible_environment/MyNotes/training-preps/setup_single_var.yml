@@ -1,0 +1,57 @@
+---
+- name: create multiple users and group
+  hosts: servers
+  remote_user: root
+  gather_facts: false
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+  - name: create the training directories in users home. 
+    file:
+      path: "/home/{{ item.user }}/training"
+      mode: 0755
+      owner: "{{ item.user }}"
+      group: "{{ item.user }}"
+      state: directory
+    loop: "{{ training_users_single_host }}"
+  
+  - name: Copy inventory file
+    template:
+      src: "files/inventory.j2"
+      dest: "/home/{{ item.user }}/training/inventory"
+      owner: "{{ item.user }}"
+      group: "{{ item.user }}"
+      mode: 0755
+    loop: "{{ training_users_single_host }}"
+
+  - name: Copy ssh config file
+    template:
+      src: "files/ssh.config.j2"
+      dest: "/home/{{ item.user }}/training/ssh.config"
+      owner: "{{ item.user }}"
+      group: "{{ item.user }}"
+      mode: 0755
+    loop: "{{ training_users_single_host }}"
+    
+  - name: Copy ansible.cfg file
+    copy:
+      src: "files/ansible.cfg"
+      dest: "/home/{{ item.user }}/training/ansible.cfg"
+      owner: "{{ item.user }}"
+      group: "{{ item.user }}"
+      mode: 0755
+    # become_user: "{{ item }}"
+    loop: "{{ training_users_single_host }}"
+
+  - name: Copy private key file
+    copy:
+      src: "files/id_rsa"
+      dest: "/home/{{ item.user }}/training/id_rsa"
+      owner: "{{ item.user }}"
+      group: "{{ item.user }}"
+      mode: 0755
+    # become_user: "{{ item }}"
+    loop: "{{ training_users_single_host }}"
+      

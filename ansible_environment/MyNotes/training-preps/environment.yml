@@ -1,0 +1,88 @@
+---
+- name: create multiple users and group
+  hosts: servers
+  remote_user: root
+  gather_facts: false
+
+  vars:
+    user_password: test
+    training_users: 
+      - training_user_1
+      - training_user_2
+      - training_user_3
+      - training_user_4
+      
+  tasks:
+  # - name: Install Git and python-pip3
+  #   apt: 
+  #     name: "{{ item }}"
+  #     update_cache: yes 
+  #     state: present
+  #   loop: 
+  #     - git
+  #     - python3-pip
+  #     - tree
+
+  # - name: install python packages for docker, openshift and kubernetes
+  #   pip: 
+  #     name: "{{ item }}"
+  #   loop:
+  #     - docker
+  #     - openshift
+  #     - kubernetes
+
+  - name: Add a group
+    group: 
+      name: training
+      state: present
+  
+  - name: Add multiple user to training groups with list of hashes i.e. name and group as subkeys
+    user: 
+      name: "{{ item }}"
+      groups: training
+      password: "{{ user_password | password_hash('sha512') }}"
+      state: present
+    loop: "{{ training_users }}"
+  
+  # - name: delete the unwanted directories in users home. 
+  #   file:
+  #     path: "/home/{{ item }}"
+  #     mode: 0755
+  #     owner: "{{ item }}"
+  #     group: "{{ item }}"
+  #     state: absent
+  #   become_user: "{{ item }}"
+  #   loop:
+  #     - training-user-1
+  #     - training-user-2
+  #     - training-user-3
+  #     - training-user-4
+
+  # - name: Git checkout
+  #   git:
+  #     repo: 'https://github.com/abinabraham23/ansible-learning.git'
+  #     dest: "/home/{{ item }}/training"
+  #     version: feature/improvements
+  #     clone: yes
+  #     force: yes
+  #   become_user: "{{ item }}"
+  #   loop:
+  #     - training-user-1
+  #     - training-user-2
+  #     - training-user-3
+  #     - training-user-4
+  
+  # - name: Capture files to delete
+  #   find:
+  #     paths: /path/to/directory
+  #     file_type: file
+  #     excludes: 
+  #       - "myfirst.file"
+  #       - "mysecond.file"
+  #   register: found_files
+  #   loop:
+  #     - training-user-1
+  #     - training-user-2
+  #     - training-user-3
+  #     - training-user-4
+  
